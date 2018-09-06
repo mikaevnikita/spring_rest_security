@@ -1,24 +1,21 @@
-package ru.mikaev.security;
+package ru.mikaev.security.details;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-import ru.mikaev.dao.UserRepository;
-import ru.mikaev.entities.User;
-
-import java.util.Optional;
+import ru.mikaev.dao.UsersRepository;
 
 @Component
 public class UserDetailsServiceImpl implements UserDetailsService {
-
     @Autowired
-    private UserRepository userRepository;
+    private UsersRepository usersRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findOneByUsername(username);
-        return new UserDetailsImpl(user.orElseThrow(() -> new UsernameNotFoundException("User not found: " + username)));
+        return new
+                UserDetailsImpl(usersRepository.findOneByUsername(username)
+                .orElseThrow(IllegalArgumentException::new));
     }
 }
